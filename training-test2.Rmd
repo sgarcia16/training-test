@@ -1,0 +1,17 @@
+---
+title: "exercise 5.10"
+author: "Sabrina Garcia"
+date: "May 17, 2018"
+output: html_document
+---
+# First Header
+
+Exercise 5.10 in reproducible r workshop
+
+## Second Header
+
+Text!
+
+### Third Header
+
+
