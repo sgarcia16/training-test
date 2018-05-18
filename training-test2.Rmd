@@ -85,6 +85,20 @@ catch_df <- catch_df %>%
 
 This is a good place to commit because we just finished a functional block of code.
 
+# Data Analysis
 
+Split, apply, combine is a common way to analyze data
+
+Filters rows, select columns
+
+Arrange sorts in ascending order
+
+```{r group}
+annual_catch <- catch_df %>% 
+  filter( Species == "Chinook" )
+  group_by( Region, Year ) %>% 
+  summarize( mean_catch = mean(catch), num_obs = n() )
+  arrange(desc( mean_catch ))
+```
 
 
