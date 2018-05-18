@@ -4,6 +4,7 @@ author: "Sabrina Garcia"
 date: "May 17, 2018"
 output: html_document
 ---
+
 # First Header
 
 Exercise 5.10 in reproducible r workshop
@@ -17,5 +18,73 @@ Text!
 #### Fourth Header
 
 Make sure you pull, commit, pull, push!
+
+# Tidy Data
+
+``` {r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE)
+```
+
+``` {r Libraries}
+library(dplyr)
+library(tidyr)
+```
+
+Reads in data from KNB [here](https://knb.ecoinformatics.org/#view/df35b.304.2)
+
+``` {r read_in_data}
+catch_df <- read.csv(url("https://knb.ecoinformatics.org/knb/d1/mn/v2/object/df35b.302.1", method = "libcurl"),
+                    stringsAsFactors = FALSE)
+head(catch_df)
+```
+
+```{r unique}
+unique(catch_df$notesRegCode)
+```
+
+Here we selected the columns we actually want
+
+``` {r remove_columns}
+catch_df <- catch_df %>% 
+  select(Region, Year, Chinook, Sockeye, Coho, Pink, Chum)
+```
+
+You can also exclude column names by including a minus sign in front
+of the column name select(-All, -notesRegCode)
+
+Still considered wide data, we can add a species column to make it tidy
+
+In gather, the key is the new column name and the values are the cell values
+You have to tell gather what to ignore
+
+``` {r gather}
+catch_df <- catch_df %>% 
+  gather( key = species, value=catch, -Region, -Year )
+```
+
+Spread does the opposite of gather and makes your data into wide format
+
+```{r spread}
+test_spread <- catch_df %>% 
+  spread(key=species, value=catch)
+```
+
+```{r rename_columns}
+catch_df <- catch_df %>% 
+  rename( catch_thousands = catch, Species = species)
+```
+
+Correct typo and change the units of catch column.
+
+```{r change_value_in_data}
+catch_df <- catch_df %>% 
+  mutate( catch_thousands = ifelse( catch_thousands == "I", 1, catch_thousands )) %>% 
+  mutate( catch_thousands = as.integer(catch_thousands) ) %>% 
+  mutate( catch = catch_thousands * 1000 )  
+```
+
+This is a good place to commit because we just finished a functional block of code.
+
+
 
 
